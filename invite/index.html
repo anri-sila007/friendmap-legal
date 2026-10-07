@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<meta name="referrer" content="no-referrer">
+<title>FriendMap</title>
+<style>
+:root { color-scheme: light dark; --text: #1d1d1f; --muted: #6e6e73; --bg: #ffffff; --line: #d2d2d7; --link: #0066cc; }
+@media (prefers-color-scheme: dark) {
+  :root { --text: #f5f5f7; --muted: #a1a1a6; --bg: #000000; --line: #424245; --link: #2997ff; }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--text);
+       font: 17px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+main { max-width: 720px; margin: 0 auto; padding: 40px 16px 64px; }
+h1 { font-size: 32px; line-height: 1.2; margin: 0 0 8px; }
+h2 { font-size: 21px; margin: 32px 0 8px; }
+p, li { margin: 8px 0; }
+ul { padding-left: 22px; }
+a { color: var(--link); }
+nav { display: flex; gap: 16px; flex-wrap: wrap; padding-bottom: 16px; border-bottom: 1px solid var(--line); margin-bottom: 24px; }
+nav a { text-decoration: none; }
+.muted { color: var(--muted); }
+
+main.invite { max-width: 520px; text-align: center; padding-top: 56px; }
+main.invite h1 { font-size: 28px; }
+main.invite ol { text-align: left; padding-left: 22px; }
+.button { display: inline-block; margin: 16px 0 4px; padding: 14px 28px; border-radius: 14px; border: 0;
+          background: var(--text); color: var(--bg); font: inherit; font-weight: 700; text-decoration: none; cursor: pointer; }
+.button.quiet { background: transparent; color: var(--link); padding: 10px 16px; font-weight: 600; }
+.card { margin-top: 32px; padding: 4px 20px 16px; border: 1px solid var(--line); border-radius: 16px; }
+[hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<main class="invite">
+<section id="invitation" hidden>
+<h1 data-t="title">You are invited to a group</h1>
+<p class="muted" data-t="lead">Open the invitation in FriendMap to see the group and join it.</p>
+<p><a id="open" class="button" href="#" data-t="open">Open in FriendMap</a></p>
+<p id="nothing" class="muted" hidden data-t="nothing">Nothing happened? Then FriendMap is not on this device yet, or this browser cannot open apps. The steps below always work.</p>
+<div class="card">
+<h2 data-t="other">If the button does not work</h2>
+<ol>
+<li data-t="step1">Install FriendMap on your iPhone and sign in.</li>
+<li data-t="step2">Copy the invitation with the button below.</li>
+<li data-t="step3">In the app open Home → My Groups → + → Join by invitation and paste it.</li>
+</ol>
+
+<button id="copy" class="button quiet" type="button" data-t="copy">Copy the invitation</button>
+</div>
+</section>
+<p id="bad" hidden data-t="bad">This link carries no invitation. Ask the person who sent it for a new one.</p>
+<noscript><p>Open this link on an iPhone with FriendMap installed, or paste it in the app: My Groups → + → Join by invitation.</p></noscript>
+</main>
+<script>
+(function () {
+  var texts = {"en": {"title": "You are invited to a group", "lead": "Open the invitation in FriendMap to see the group and join it.", "open": "Open in FriendMap", "nothing": "Nothing happened? Then FriendMap is not on this device yet, or this browser cannot open apps. The steps below always work.", "other": "If the button does not work", "step1": "Install FriendMap on your iPhone and sign in.", "step2": "Copy the invitation with the button below.", "step3": "In the app open Home → My Groups → + → Join by invitation and paste it.", "copy": "Copy the invitation", "copied": "Copied", "bad": "This link carries no invitation. Ask the person who sent it for a new one.", "store": "FriendMap in the App Store"}, "ru": {"title": "Вас пригласили в группу", "lead": "Откройте приглашение в FriendMap — там видно, что это за группа, и можно в неё вступить.", "open": "Открыть в FriendMap", "nothing": "Ничего не произошло? Значит, FriendMap ещё не установлен на этом устройстве или этот браузер не умеет открывать приложения. Способ ниже работает всегда.", "other": "Если кнопка не срабатывает", "step1": "Установите FriendMap на iPhone и войдите.", "step2": "Скопируйте приглашение кнопкой ниже.", "step3": "В приложении откройте «Главная» → «Мои группы» → «+» → «Вступить по приглашению» и вставьте его.", "copy": "Скопировать приглашение", "copied": "Скопировано", "bad": "В этой ссылке нет приглашения. Попросите того, кто её прислал, отправить новую.", "store": "FriendMap в App Store"}, "ka": {"title": "თქვენ მოგიწვიეს ჯგუფში", "lead": "გახსენით მოწვევა FriendMap-ში: იქ ჩანს, რა ჯგუფია, და შეგიძლიათ გაწევრიანება.", "open": "გახსნა FriendMap-ში", "nothing": "არაფერი მოხდა? ესე იგი, FriendMap ამ მოწყობილობაზე ჯერ არ არის, ან ეს ბრაუზერი აპებს ვერ ხსნის. ქვემოთ მოცემული გზა ყოველთვის მუშაობს.", "other": "თუ ღილაკი არ მუშაობს", "step1": "დააყენეთ FriendMap iPhone-ზე და შედით ანგარიშში.", "step2": "დააკოპირეთ მოწვევა ქვემოთ მოცემული ღილაკით.", "step3": "აპში გახსენით „მთავარი“ → „ჩემი ჯგუფები“ → „+“ → „გაწევრიანება მოწვევით“ და ჩასვით.", "copy": "მოწვევის კოპირება", "copied": "დაკოპირდა", "bad": "ამ ბმულში მოწვევა არ არის. სთხოვეთ გამომგზავნს, ახალი გამოგიგზავნოთ.", "store": "FriendMap App Store-ში"}};
+  var language = (navigator.language || 'en').slice(0, 2).toLowerCase();
+  var t = texts[language] || texts.en;
+  document.documentElement.lang = texts[language] ? language : 'en';
+  document.querySelectorAll('[data-t]').forEach(function (node) {
+    node.textContent = t[node.getAttribute('data-t')];
+  });
+
+  // The invitation is the fragment: https://.../invite/#<id>. Another
+  // invitation opened in the same tab changes only the fragment.
+  window.addEventListener('hashchange', function () { location.reload(); });
+  var id = (location.hash || '').replace(/^#/, '').toLowerCase();
+  var valid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/.test(id);
+  document.getElementById(valid ? 'invitation' : 'bad').hidden = false;
+  if (!valid) { return; }
+
+  var open = document.getElementById('open');
+  open.href = 'friendmap://tribe-invite/' + id;
+  open.addEventListener('click', function () {
+    setTimeout(function () { document.getElementById('nothing').hidden = false; }, 1500);
+  });
+
+  var copy = document.getElementById('copy');
+  copy.addEventListener('click', function () {
+    var done = function () { copy.textContent = t.copied; };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(location.href).then(done, function () { window.prompt('', location.href); });
+    } else {
+      window.prompt('', location.href);
+    }
+  });
+})();
+</script>
+</body>
+</html>
